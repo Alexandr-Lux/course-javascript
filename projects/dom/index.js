@@ -146,6 +146,26 @@ function deleteTextNodesRecursive(where) {
   }
 }
 
+// function deleteTextNodesRecursive1(where) {
+// 	if (where.nodeType === 3) {
+// 		where.remove();
+// 	} else {
+// 		for (let child of where.childNodes) {
+// 			deleteTextNodesRecursive1(child);
+// 		}
+// 	}
+// }
+
+// function deleteTextNodesRecursive2(where) {
+// 	for (let child of where.childNodes) {
+// 		if (child.nodeType === 3) {
+// 			child.remove();
+// 		} else {
+// 			deleteTextNodesRecursive2(child)
+// 		}
+// 	}
+// }
+
 /*
  Задание 7 *:
 
