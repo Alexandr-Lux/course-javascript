@@ -29,13 +29,10 @@ function createDivWithText(text) {
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
 function prepend(what, where) {
-  const one = what;
-  const two = where;
+  where.appendChild(what);
 
-  two.appendChild(one);
-
-  while (one !== two.firstChild) {
-    two.appendChild(two.firstChild);
+  while (what !== where.firstChild) {
+    where.appendChild(where.firstChild);
   }
 }
 
@@ -59,11 +56,9 @@ function prepend(what, where) {
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
-  const wrapper = where;
-  const childs = wrapper.children;
   const nextPElems = [];
 
-  for (const elem of childs) {
+  for (const elem of where.children) {
     const nextElem = elem.nextElementSibling;
 
     if (nextElem !== null) {
