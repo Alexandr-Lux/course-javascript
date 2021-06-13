@@ -105,13 +105,7 @@ function tableSync(obj) {
 
   if (obj) {
     for (const key in obj) {
-      listTable.innerHTML += `<tr>
-												<td>${key}</td>
-												<td>${obj[key]}</td>
-												<td>
-													<button>${deleteButtonText}</button>
-												</td>
-											</tr>`;
+      listTable.innerHTML += `<tr><td>${key}</td><td>${obj[key]}</td><td><button>${deleteButtonText}</button></td></tr>`;
     }
   }
 }
@@ -122,9 +116,10 @@ function deleteCookie(cookie) {
 
 listTable.addEventListener('click', (e) => {
   if (e.target.tagName === 'BUTTON') {
-    const deletedCookie = `${e.target.closest('tr').firstChild.textContent}=${
-      e.target.closest('tr').firstChild.nextSibling.textContent
-    }`;
+    const nameCookie = e.target.closest('tr').firstChild.textContent;
+    const valueCookie = e.target.closest('tr').firstChild.nextSibling.textContent;
+    const deletedCookie = `${nameCookie}=${valueCookie}`;
+
     deleteCookie(deletedCookie);
 
     listTable.removeChild(e.target.closest('tr'));
