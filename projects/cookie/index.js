@@ -2,14 +2,14 @@
  ДЗ 7 - Создать редактор cookie с возможностью фильтрации
 
  7.1: На странице должна быть таблица со списком имеющихся cookie. Таблица должна иметь следующие столбцы:
-   - имя
-   - значение
-   - удалить (при нажатии на кнопку, выбранная cookie удаляется из браузера и таблицы)
+	 - имя
+	 - значение
+	 - удалить (при нажатии на кнопку, выбранная cookie удаляется из браузера и таблицы)
 
  7.2: На странице должна быть форма для добавления новой cookie. Форма должна содержать следующие поля:
-   - имя
-   - значение
-   - добавить (при нажатии на кнопку, в браузер и таблицу добавляется новая cookie с указанным именем и значением)
+	 - имя
+	 - значение
+	 - добавить (при нажатии на кнопку, в браузер и таблицу добавляется новая cookie с указанным именем и значением)
 
  Если добавляется cookie с именем уже существующей cookie, то ее значение в браузере и таблице должно быть обновлено
 
@@ -30,8 +30,8 @@ import './cookie.html';
  Если вы создаете новые html-элементы и добавляете их на страницу, то добавляйте их только в этот контейнер
 
  Пример:
-   const newDiv = document.createElement('div');
-   homeworkContainer.appendChild(newDiv);
+	 const newDiv = document.createElement('div');
+	 homeworkContainer.appendChild(newDiv);
  */
 const homeworkContainer = document.querySelector('#app');
 // текстовое поле для фильтрации cookie
@@ -44,6 +44,9 @@ const addValueInput = homeworkContainer.querySelector('#add-value-input');
 const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
+
+const deleteButtonText = 'Удалить';
+let filter = filterNameInput.value.toLowerCase();
 
 const getCookies = () => {
   if (document.cookie) {
@@ -59,14 +62,30 @@ const getCookies = () => {
   }
 };
 
-filterNameInput.addEventListener('input', () => {
+const filterFn = () => {
+  const deleteArray = [];
+
+  tableSync(getCookies());
+
   for (const row of listTable.childNodes) {
-    if (!row.textContent.includes(filterNameInput.value)) {
-      row.style.display = 'none';
-    } else {
-      tableSync(getCookies());
+    const filterTarget = row.textContent
+      .slice(0, row.textContent.length - deleteButtonText.length)
+      .toLowerCase();
+
+    filter = filterNameInput.value.toLowerCase();
+
+    if (!filterTarget.includes(filter)) {
+      deleteArray.push(row);
     }
   }
+
+  for (const el of deleteArray) {
+    el.remove();
+  }
+};
+
+filterNameInput.addEventListener('input', () => {
+  filterFn();
 });
 
 addButton.addEventListener('click', () => {
@@ -74,8 +93,11 @@ addButton.addEventListener('click', () => {
     document.cookie = `${addNameInput.value}=${addValueInput.value}`;
   }
 
+  // addNameInput.value = '';
+  // addValueInput.value = '';
+
   getCookies();
-  tableSync(getCookies());
+  filterFn();
 });
 
 function tableSync(obj) {
@@ -83,7 +105,13 @@ function tableSync(obj) {
 
   if (obj) {
     for (const key in obj) {
-      listTable.innerHTML += `<tr><td>${key}</td><td>${obj[key]}</td><td><button>X</button></td></tr>`;
+      listTable.innerHTML += `<tr>
+												<td>${key}</td>
+												<td>${obj[key]}</td>
+												<td>
+													<button>${deleteButtonText}</button>
+												</td>
+											</tr>`;
     }
   }
 }
@@ -103,5 +131,6 @@ listTable.addEventListener('click', (e) => {
   }
 });
 
-getCookies();
-tableSync(getCookies());
+if (!filter) {
+  tableSync(getCookies());
+}
